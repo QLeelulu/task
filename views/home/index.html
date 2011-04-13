@@ -1,0 +1,17 @@
+{# ../../header.html #}
+	
+	<h3 class="title">最新囧囧</h3>
+	<?js if(!vd.jokes || !vd.jokes.length){ ?>
+	<div>暂时还没有笑话.<a href="/joke/add">我来添加</a></div>
+	<?js }else{ ?>
+	<ul>
+	<?js vd.jokes.forEach(function(joke, i){ ?>
+		<li>
+			<p><a href="/joke/show/#{joke.id}">#{joke.title || ('囧囧'+joke.id)}</a></p>
+			<p>#{joke.content}</p>
+		</li>
+	<?js }); ?>
+	</ul>
+	<?js } ?>
+
+{# ../../footer.html #}
