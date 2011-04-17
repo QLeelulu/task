@@ -4,7 +4,8 @@
  */
  
 var jokeModel = require('../models/joke'),
-    userAuthFilter = require('../filters/auth').userAuthFilter;
+    userAuthFilter = require('../filters/auth').userAuthFilter,
+    jokeForm = require('../forms/joke').jokeForm;
 
 exports.show = function(fnNext){
     var _t = this, jokeId = this.routeData.args.id;
@@ -43,11 +44,9 @@ exports.add_post = function(fnNext){
     var _t = this,
         r = {};
     
-    if(_t.req.post.content){
-        var joke = {
-            content: _t.req.post.content,
-            title: _t.req.post.title || ''
-        };
+    var joke = new jokeForm(_t.req.post);
+    if(joke.isValid()){
+        joke = joke.fieldDatas();
         joke.created_time = joke.updated_time = (new Date()).format('yyyy-MM-dd hh:mm:ss');
         jokeModel.insert(joke, 
             function(err, success, insertId){
@@ -61,8 +60,30 @@ exports.add_post = function(fnNext){
             }
         );
     }else{
-        r.error = '请填写内容';
+        r.error = joke.validErrors;
         fnNext( this.ar.json(r) );
     }
+    
+//    if(_t.req.post.content){
+//        var joke = {
+//            content: _t.req.post.content,
+//            title: _t.req.post.title || ''
+//        };
+//        joke.created_time = joke.updated_time = (new Date()).format('yyyy-MM-dd hh:mm:ss');
+//        jokeModel.insert(joke, 
+//            function(err, success, insertId){
+//                if(success){
+//                    r.id = insertId;
+//                    r.success = true;
+//                }else{
+//                    r.error = '更新数据库失败'
+//                }
+//                fnNext( _t.ar.json(r) );
+//            }
+//        );
+//    }else{
+//        r.error = '请填写内容';
+//        fnNext( this.ar.json(r) );
+//    }
 };
 exports.add_post.filters = [userAuthFilter];

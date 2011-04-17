@@ -39,7 +39,9 @@ var MysqlOperator = exports.MysqlOperator = Class.extend({
         var str = '', sql = '';
         if(values){
             for(var k in values){
-                str += k + '="' + values[k] + '",';
+                if(!utilities.isFunction(values[k])){
+                    str += k + '="' + values[k] + '",';
+                }
             }
             str = str.slice(0, -1);
         }
@@ -62,7 +64,7 @@ var MysqlOperator = exports.MysqlOperator = Class.extend({
     insert: function(table, values, cb){
         this.exec('C', table, values, '', function(err, rows, fields){
             var success = (!err && rows.affectedRows>0) ? true : false;
-            cb(err, success, rows.insertId);
+            cb(err, success, rows && rows.insertId);
         });
     },
     update: function(table, values, where, cb){
