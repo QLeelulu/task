@@ -3,6 +3,8 @@
  * @blog http://qleelulu.cnblogs.com
  */
 
+require.paths.unshift('refLib')
+
 require('./util/monkey_patching');
 global.n2Mvc = require('../n2Mvc');
 

@@ -45,6 +45,13 @@ table {
 select,input,textarea {
 	font: 99% "Trebuchet MS",arial,helvetica,clean,sans-serif;
 }
+input, textarea{
+	border: 1px solid #999;
+	border-bottom: 1px solid #888;
+	font-size: 13px;
+	width: 250px;
+	padding: 3px;
+}
 textarea {
     height: 100px;
     width: 400px;
@@ -75,6 +82,7 @@ body * {
 body {
 	background: #fff;
 	color: #333;
+	padding-top:3px;
 }
 a {
 	color: #369;
@@ -112,9 +120,13 @@ em {
 .error{color:red;}
 #container {
 	margin: 10px;
+	width:960px;
+	margin:0 auto;
 }
 #header {
 	background: no-repeat top right;
+	border-bottom: solid 1px #CCC;
+	padding-bottom:5px;
 }
 #header .intro h1 {
 	font-size: 24px;
@@ -158,6 +170,19 @@ em {
 	background-color: #06c;
 	color: #fff;
 }
+#header .top-user-bar{
+	float:right;
+	font-size: 13px;
+	margin-right: 10px;
+}
+#header .top-user-bar a{
+	padding:3px;
+	margin:0 3px;
+}
+#header .top-user-bar a:hover{
+	background-color:#2e6ebc;
+	color:#fff;
+}
 #content {
 	width: 100%;
 	margin: 25px 0 0;
@@ -167,7 +192,6 @@ em {
 	clear: both;
 	font-size: 23px;
 	margin: 1px 0px;
-	padding: 5px;
 	position: relative;
 	z-index: 1;
 }

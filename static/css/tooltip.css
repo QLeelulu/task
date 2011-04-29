@@ -1,13 +1,13 @@
 ﻿.tooltipinputerr
 {
 	text-indent: 18px;
-	border: solid 2px #eee;
+	border: solid 1px #A82400;
 	background: #ffff99 url(../images/exclamation.png) no-repeat right center;
 	}
 
 .tooltipinputok
 {
-	border: solid 2px green;
+	border: solid 1px green;
 	background: url(../images/accept.png) no-repeat right center;
 	}
 

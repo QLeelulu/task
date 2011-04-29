@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" /> 
-	<title>囧囧有神</title> 
+	<title>掩耳</title> 
 	<meta name="description" content="" /> 
 	<meta name="keywords" content="" /> 
 	<link rel="stylesheet" type="text/css" href="/static/css/base.css" media="screen" /> 
@@ -22,23 +22,26 @@
 	<div id="container"> 
 		<div id="header">
 			<div class="intro"> 
-				<h1><a href="/">囧囧有神</a></h1> 
-				<div class="description">我们的囧囧人参</div> 
+				<div class="top-user-bar">
+					<?js if(req.user){ ?>
+					<span>#{req.user.email},你好!</span> 
+					<a href="/user/logout">退出</a>
+					<?js }else{ ?>
+					<a href="/user/login">登录</a>
+					<a href="/user/register">注册</a>
+					<?js } ?>
+				</div>
+				<h1><a href="/">掩耳</a></h1> 
+				<div class="description">与朋友分享你的任务</div> 
 			</div>
+			<!--
 			<div class="nav"> 
 				<ul class="clearfix">
 					<li><a href="/joke/add">添加我的囧囧</a></li>
-					<span style="float:right;">
-					<?js if(req.user){ ?>
-					<li class="title">#{req.user.username},你好!</li> 
-					<li><a href="/user/logout">退出</a></li>
-					<?js }else{ ?>
-					<li><a href="/user/login">登录</a></li>
-					<li><a href="/user/register">注册</a></li>
-					<?js } ?>
-					</span>
+					
 				</ul>
 			</div>
+			-->
 		</div>
 		<div id="content">
 		

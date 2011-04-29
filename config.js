@@ -9,6 +9,14 @@ exports.projectDir = __dirname;
 
 exports.staticFileDir = 'static';
 
+//require('mongoose').connect('mongodb://localhost/net4_task');
+/*******
+ * DATABASE
+ */
+exports.MONGO_HOST = 'localhost';
+exports.MONGO_PORT = 27017;
+exports.MONGO_DB_NAME = 'node-mongo-task';
+
 exports.middlewares = [
     'cookie',
     'initUserInfo',
