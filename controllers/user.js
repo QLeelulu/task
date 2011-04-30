@@ -17,7 +17,7 @@ exports.register = function(fnNext){
 
 exports.register_post = function(fnNext){
     if(this.req.user){
-        fnNext( this.ar.redirect('/') );
+        return fnNext( this.ar.redirect('/') );
     }
     
     var r = {}, _t = this;
@@ -25,22 +25,33 @@ exports.register_post = function(fnNext){
     if(user.isValid()){
         user = user.fieldDatas();
         user.email = user.email.toLowerCase();
-        user.password = crypto.createHash('md5').update(user.password).digest("hex");
-        delete user.password2;
-        user.tickets = [];
-        user.created_at = user.updated_at = new Date(); //(new Date()).format('yyyy-MM-dd hh:mm:ss');
-        userModel.insert(user, 
-            function(err, user){
+        userModel.getByEmail(user.email, function(err, _user){
+            if(err || _user){
                 if(err){
-                    r.error = '更新数据库失败';
-                }else if(user){
-                    r.success = true;
+                    r.error = '系统错误';
                 }else{
-                    r.error = '未知错误';
+                    r.error = '该Email已经注册过'
                 }
-                fnNext( _t.ar.json(r) );
+                return fnNext( _t.ar.json(r) );
             }
-        );
+            
+            user.password = crypto.createHash('md5').update(user.password).digest("hex");
+            delete user.password2;
+            user.tickets = [];
+            user.created_at = user.updated_at = new Date(); //(new Date()).format('yyyy-MM-dd hh:mm:ss');
+            userModel.insert(user, 
+                function(err, user){
+                    if(err){
+                        r.error = '更新数据库失败';
+                    }else if(user){
+                        r.success = true;
+                    }else{
+                        r.error = '未知错误';
+                    }
+                    fnNext( _t.ar.json(r) );
+                }
+            );
+        });
     }else{
         r.error = user.validErrors;
         fnNext( this.ar.json(r) );

@@ -6,12 +6,12 @@
 			<div id="showMsg" class="error">#{viewdata.error}</div>
 			<ul>
 				<li><label for="email">Email:</label><input type="text" name="email" value="#{viewdata.email}" reg="^[a-z]([a-z0-9]*[-_\.]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$" tip="电子邮件地址" /></li>
-				<li><label for="password">密码:</label><input type="text" name="password" reg="^.{6,}$" tip="输入你的密码，最少6位" /></li>
+				<li><label for="password">密码:</label><input type="password" name="password" reg="^.{6,}$" tip="输入你的密码，最少6位" /></li>
 				<li>
 					<input id="user_remember_me" name="remember_me" style="width:auto;" type="checkbox" value="1">
 					<label for="user_remember_me" style="display:inline;">记住登录状态</label>
 				</li>
-				<li><button type="submit" id="btnLogin" class="button submit">登 录</button></li>
+				<li><button type="submit" id="btnLogin" class="minibutton blue">登 录</button></li>
 			<ul>
 		</form>
 		<div><a href="/user/register">还没有帐号？现在就去注册</a></div>

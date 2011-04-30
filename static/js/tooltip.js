@@ -21,7 +21,7 @@
             {
                 $(this).hover(function(){
                     $('.tooltipshowpanel')
-                        .css({left:$.getLeft(this)+'px',top:$.getTop(this)+'px'});
+                        .css({left:$.getLeft(this)+'px',top:($.getTop(this)+3)+'px'});
                     $('.tooltipshowpanel').html($(this).attr('tip'));
                     $('.tooltipshowpanel').fadeIn("fast");
                 },
@@ -56,19 +56,19 @@
                 return getthis.check();
             } );
         }
-	getthis.check = function(){
-		var isSubmit = true;
-                getthis.each(function(){
-                    var thisReg = new RegExp($(this).attr('reg'));
-                    if(!thisReg.test(this.value))
-                    {
-                        $(this).removeClass('tooltipinputok').addClass('tooltipinputerr');
-                        isSubmit = false;
-                    }
-                });
-                return isSubmit;	
-	};
-	return getthis;
+    	getthis.check = function(){
+    		var isSubmit = true;
+                    getthis.each(function(){
+                        var thisReg = new RegExp($(this).attr('reg'));
+                        if(!thisReg.test(this.value))
+                        {
+                            $(this).removeClass('tooltipinputok').addClass('tooltipinputerr');
+                            isSubmit = false;
+                        }
+                    });
+                    return isSubmit;	
+    	};
+    	return getthis;
     };
 
     $.extend({

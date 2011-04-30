@@ -8,7 +8,7 @@ exports.userAuthFilter = {
         if(ctx.req.user){
             fnNext();
         }else{
-            fnNext( ctx.ar.redirect('/user/login') );
+            fnNext( ctx.ar.redirect('/user/login?return_url='+ ctx.req.path) );
         }
     }
 };

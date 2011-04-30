@@ -1,17 +1,70 @@
 {# ../../header.html #}
 	
-	<h3 class="title">最新囧囧</h3>
-	<?js if(!vd.jokes || !vd.jokes.length){ ?>
-	<div>暂时还没有笑话.<a href="/joke/add">我来添加</a></div>
-	<?js }else{ ?>
+<div class="main">
+	<?js if(req.user){ ?>
+	<div id="postForm">
+		<textarea id="taskContent" name="text"></textarea>
+		<div class="ctrl">
+			隐私:<select name="privacy">
+				<option value="999">公开</option>
+				<option value="1">私人</option>
+			</select>
+			状态:<select name="status">
+				<option value="1">等待</option>
+				<option value="999">开始</option>
+			</select>
+			优先级:<select name="priority">
+				<option value="4">4</option>
+				<option value="3">3</option>
+				<option value="2">2</option>
+				<option value="1">1</option>
+			</select>
+			<button class="minibutton green" id="btnAddTask">添加任务</button>
+		</div>
+	</div>
+	<?js } ?>
+	<?js if(vd.tasks){ ?>
 	<ul>
-	<?js vd.jokes.forEach(function(joke, i){ ?>
+	<?js vd.tasks.forEach(function(task, i){ ?>
 		<li>
-			<p><a href="/joke/show/#{joke.id}">#{joke.title || ('囧囧'+joke.id)}</a></p>
-			<p>#{joke.content}</p>
+			<p><a href="/task/show/#{task._id}">#{task._id}</a></p>
+			<p>${task.text}</p>
 		</li>
 	<?js }); ?>
 	</ul>
 	<?js } ?>
+</div>
+<div class="sidebar">
+	<h3>侧栏</h3>
+</div>
+
+<?js if(req.user){ ?>
+<script type="text/javascript">
+	$("#btnAddTask").click(function(){
+		var postData = {};
+		$("#postForm select, #postForm textarea").each(function(){
+			postData[$(this).attr('name')] = $.trim($(this).val());
+		});
+		if(!postData.text){
+			alert('请填写任务内容');
+			return;
+		}
+		$.post('/task/add', postData, function(r){
+			if(r.success){
+				alert('添加成功');
+			}else{
+				var err = r.error;
+				if(typeof err !== 'string'){
+					err = '';
+					for(var k in r.error){
+						err += r.error[k] + '\r\n';
+					}
+				}
+				alert(err);
+			}
+		});
+	});
+</script>
+<?js } ?>
 
 {# ../../footer.html #}
