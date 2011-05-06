@@ -67,7 +67,7 @@ exports.add_comment_post = function(fnNext){
                     //if(!comment.taskschedule_id && comment.taskschedule_id > 0){
                         //taskModel.addCommentCount(comment.taskschedule_id, 1);
                     //}
-                }
+                } 
                 fnNext( _t.ar.json(r) );
             }
         );
