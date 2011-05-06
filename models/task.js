@@ -34,6 +34,7 @@ db.bind(collectionName, {
             page = Number(page);
         page = (isNaN(page) || page < 1) ? 1 : page;
         pagesize = (isNaN(pagesize) || pagesize < 5) ? 5 : pagesize;
+        friend_ids = friend_ids || [];
         friend_ids.push(user_id);
         _t.find({user_id: {$in: friend_ids}}).skip((page-1)*pagesize).limit(pagesize).sort('created_at', -1).toArray(function(err, tasks){
             if(err || !tasks || !tasks.length){
