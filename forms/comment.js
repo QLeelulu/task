@@ -11,10 +11,12 @@ exports.commentForm = forms.newForm({
         required_msg: '评论内容必填'
     }
   , task_id:{
+        required: true,
         number: true,
         number_msg: '必须为数字'
     }
   , taskschedule_id:{
+        required: true,
         number: true,
         number_msg: '必须为数字'
     }
