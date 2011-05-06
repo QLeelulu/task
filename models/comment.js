@@ -7,7 +7,7 @@
 /*
   `task_id` BIGINT NULL COMMENT '任务Id' ,
   `taskschedule_id` BIGINT NULL COMMENT '任务进度Id' ,
-  `content` VARCHAR(280) NOT NULL ,
+  `text` VARCHAR(280) NOT NULL ,
   `user_id` BIGINT NULL COMMENT '评论者Id' ,
   'created_at'
 */
