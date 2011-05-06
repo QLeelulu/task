@@ -14,25 +14,34 @@
 				<option value="999">开始</option>
 			</select>
 			优先级:<select name="priority">
-				<option value="4">4</option>
-				<option value="3">3</option>
-				<option value="2">2</option>
 				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
 			</select>
 			<button class="minibutton green" id="btnAddTask">添加任务</button>
 		</div>
 	</div>
 	<?js } ?>
+	
+	<div class="tasklist">
 	<?js if(vd.tasks){ ?>
 	<ul>
 	<?js vd.tasks.forEach(function(task, i){ ?>
 		<li>
-			<p><a href="/task/show/#{task._id}">#{task._id}</a></p>
-			<p>${task.text}</p>
+			<div class="head_pic">
+				<a href="/n/${task.user.screen_name}" title="#{task.user.email}"><img src="#{task.user.profile_image_url || '/static/images/user_head.gif'}" /></a>
+			</div>
+			<div class="task-content">
+				<a class="username" href="/n/${task.user.screen_name}">${task.user.screen_name}:</a>
+				${task.text}
+			</div>
 		</li>
 	<?js }); ?>
 	</ul>
 	<?js } ?>
+	</div>
+	
 </div>
 <div class="sidebar">
 	<h3>侧栏</h3>

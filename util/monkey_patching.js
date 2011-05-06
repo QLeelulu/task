@@ -47,3 +47,31 @@ function formatText(msg, values, filter) {
 String.prototype.format = function(data) {
 	return formatText(this, data);
 };
+
+/************
+ * 并行执行，并确认最终回调
+ * var combo = new Combo(function(){
+ *      console.log('finished');
+ * });
+ * combo.add();
+ * db.find(function(){
+ *      combo.finishOne();
+ * });
+ */
+function Combo(callback) {
+  this.callback = callback;
+  this.items = 0;
+}
+
+Combo.prototype = {
+  add: function () {
+    this.items++;
+  },
+  finishOne: function () {
+    this.items--;
+    if (this.items == 0) {
+      this.callback.apply(this);
+    }
+  }
+};
+global.Combo = Combo;

@@ -24,7 +24,7 @@
 			<div class="intro"> 
 				<div class="top-user-bar">
 					<?js if(req.user){ ?>
-					<span>#{req.user.email},你好!</span> 
+					<span>#{req.user.screen_name},你好!</span> 
 					<a href="/user/logout">退出</a>
 					<?js }else{ ?>
 					<a href="/user/login">登录</a>

@@ -1,0 +1,69 @@
+{# ../../header.html #}
+	
+<div class="main">
+	
+	<div class="user_profile">
+		<div class="user_head">
+			<img src="#{vd.user.profile_image_url || '/static/images/user_head.gif'}" />
+		</div>
+		<div class="info">
+			<div class="name">${vd.user.screen_name}</div>
+			<div class="des">${vd.user.description}</div>
+		</div>
+	</div>
+	
+	<div class="tasklist">
+	<?js if(vd.tasks){ ?>
+	<ul>
+	<?js vd.tasks.forEach(function(task, i){ ?>
+		<li>
+			<div class="head_pic">
+				<a href="###" title="#{task.user.email}"><img src="#{task.user.profile_image_url || '/static/images/user_head.gif'}" /></a>
+			</div>
+			<div class="task-content">
+				<a class="username" href="###">${task.user.screen_name}:</a>
+				${task.text}
+			</div>
+		</li>
+	<?js }); ?>
+	</ul>
+	<?js } ?>
+	</div>
+	
+</div>
+<div class="sidebar">
+	<div>
+		<button id="btn_follow_control" uid="#{vd.user._id}" class="minibutton follow_control <?js if(!vd.isFollowed){ ?>green<?js } ?>">
+			<?js if(vd.isFollowed){ ?>取消关注<?js }else{ ?>关 注<?js } ?>
+		</button>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$("#btn_follow_control").click(function(){
+		var _t = $(this),
+			url = '/user/follow_control/',
+			data = {follow_user_id: _t.attr('uid')};
+		if($(this).hasClass('green')){
+			data.follow = 1;
+		}else{
+			data.follow = 0;
+		}
+		$.post(url, data, function(r){
+			if(r.success){
+				if (data.follow) {
+					_t.removeClass('green').html('取消关注');
+				}else{
+					_t.addClass('green').html('关注');
+				}
+			}else{
+				alert(r.error);
+			}
+		});
+	});
+
+</script>
+
+
+{# ../../footer.html #}

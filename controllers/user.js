@@ -5,39 +5,54 @@
 
 var userModel = require('../models/user'),
     userForm = require('../forms/user'),
+    userAuthFilter = require('../filters/auth').userAuthFilter,
     crypto = require('crypto');
 
+/************
+ * 注册
+ */
 exports.register = function(fnNext){
     if(this.req.user){
         fnNext( this.ar.redirect('/') );
     }
-    
+    userModel.getByEmailOrScreenName('sdf', 'qleelulu', function(err, _user){ console.log(_user)});
     fnNext( this.ar.view() );
 };
 
+/************
+ * 注册表单提交
+ */
 exports.register_post = function(fnNext){
     if(this.req.user){
         return fnNext( this.ar.redirect('/') );
     }
     
-    var r = {}, _t = this;
+    var r = {error:''}, _t = this;
     var user = new userForm.userRegForm(_t.req.post);
     if(user.isValid()){
         user = user.fieldDatas();
         user.email = user.email.toLowerCase();
-        userModel.getByEmail(user.email, function(err, _user){
+        userModel.getByEmailOrScreenName(user.email, user.screen_name, function(err, _user){
             if(err || _user){
                 if(err){
                     r.error = '系统错误';
                 }else{
-                    r.error = '该Email已经注册过'
+                    if( user.screen_name.toLowerCase() == _user.screen_name.toLowerCase() ){
+                        r.error = '该昵称已经被注册.\r\n';
+                    }
+                    if( user.email.toLowerCase() == _user.email.toLowerCase() ){
+                        r.error += '该Email已经注册过';
+                    }
                 }
                 return fnNext( _t.ar.json(r) );
             }
             
             user.password = crypto.createHash('md5').update(user.password).digest("hex");
             delete user.password2;
+            user.screen_name_lower = user.screen_name.toLowerCase();
+            // $push或者$addToSet的时候，如果字段未定义，则会自动作为array来处理，所以这里不用初始化都没关系的
             user.tickets = [];
+            user.friends_ids = [];
             user.created_at = user.updated_at = new Date(); //(new Date()).format('yyyy-MM-dd hh:mm:ss');
             userModel.insert(user, 
                 function(err, user){
@@ -58,6 +73,9 @@ exports.register_post = function(fnNext){
     }
 };
 
+/************
+ * 登录
+ */
 exports.login = function(fnNext){
     if(this.req.user){
         fnNext( this.ar.redirect('/') );
@@ -66,6 +84,9 @@ exports.login = function(fnNext){
     }
 };
 
+/************
+ * 登录表单提交
+ */
 exports.login_post = function(fnNext){
     if(this.req.user){
         fnNext( this.ar.redirect('/') );
@@ -119,6 +140,9 @@ exports.login_post = function(fnNext){
     });
 };
 
+/************
+ * 退出
+ */
 exports.logout = function(fnNext){
     if(this.req.user){
         userModel.updateById(this.req.user._id.toString(), 
@@ -130,4 +154,59 @@ exports.logout = function(fnNext){
     fnNext( this.ar.redirect('/') );
 };
 
+/************
+ * 根据 screen_name 查看用户首页
+ */
+exports.user_by_screen_name = function(fnNext){
+    var _t = this;
+    userModel.getByScreenName(_t.routeData.args.screen_name, function(err, user){
+        if(err || !user){
+            fnNext(_t.ar.notFound());
+        }else{
+            var vd = {user:user};
+            if(_t.req.user){
+                userModel.isFollowed(_t.req.user._id.toString(), user._id.toString(), function(err, isFollowed){
+                    vd.isFollowed = isFollowed;
+                    fnNext(_t.ar.view(vd, 'user/user_info.html'));
+                });
+            }else{
+                fnNext(_t.ar.view(vd, 'user/user_info.html'));
+            }
+        }
+    });
+};
+
+/************
+ * 关注、取消关注
+ * 参数`1`为关注，`0`为取消关注
+ */
+exports.follow_control = function(fnNext){
+    var _t = this,
+        r = {success: false},
+        follow = _t.req.post.follow,
+        follow_user_id = _t.req.post.follow_user_id;
+    if(follow_user_id && follow==='0'){
+        userModel.unfollow(_t.req.user._id.toString(), follow_user_id, function(err, user){
+            if(err){
+                r.error = err.message; 
+            }else{
+                r.success = true;
+            }
+            fnNext( _t.ar.json(r) );
+        });
+    }else if(follow_user_id && follow === '1'){
+        userModel.follow(_t.req.user._id.toString(), follow_user_id, function(err, user){
+            if(err){
+                r.error = err.message; 
+            }else{
+                r.success = true;
+            }
+            fnNext( _t.ar.json(r) );
+        });
+    }else{
+        r.error = '参数错误';
+        fnNext( _t.ar.json(r) );
+    }
+};
+exports.follow_control.filters = [userAuthFilter];
 
