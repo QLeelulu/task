@@ -92,10 +92,12 @@ db.bind(collectionName, {
 		taskIds.push(tasks[i]._id);
             }
 	    //获取任务评论次数
+	    var count = 0;
 	    commentModel.getCommentCount(taskIds, 1, function(retCountDict){
 		if(retCountDict){
 		    for(var j=0, lenj=tasks.length; j<lenj; j++){
-			tasks[j].commentCount = retCountDict[tasks[j]._id.toString()];
+			count = retCountDict[tasks[j]._id.toString()];
+			tasks[j].commentCount = count?count:0;
 		    }
 		}
 	    }); 
