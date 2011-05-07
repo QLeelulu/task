@@ -61,18 +61,36 @@ exports.add_comment_post = function(fnNext){
                     r.error = '更新数据库失败';
                 }else{
                     r.success = true;
-                    //添加任务的评论次数
-                    //taskModel.addCommentCount(comment.task_id, 1);
-                    //添加任务进度的评论次数
-                    //if(!comment.taskschedule_id && comment.taskschedule_id > 0){
-                        //taskModel.addCommentCount(comment.taskschedule_id, 1);
-                    //}
                 } 
                 fnNext( _t.ar.json(r) );
             }
         );
     }else{
         r.error = comment.validErrors;
+        fnNext( this.ar.json(r) );
+    }
+};
+
+exports.get_comments = function(fnNext){
+    var _t = this,
+    r = {};
+    var type = _t.req.post.type,
+        task_id = _t.req.post.task_id
+	page = _t.req.post.page,
+	pagesize = _t.req.post.pagesize;
+    if(task_id && task_id > 0){
+        commentModel.getTaskComments(task_id, type, page, pagesize, 
+            function(err, comments){
+                if(err){
+                    r.error = '获取评论失败';
+                }else{
+                    r.success = true;
+		    r.comments = comments;
+                } 
+                fnNext( _t.ar.json(r) );
+            }
+        );
+    }else{
         fnNext( this.ar.json(r) );
     }
 };

@@ -42,9 +42,14 @@ db.bind(collectionName, {
                 return;
             }
             var ids = [];
+	    //var taskIds = [];
             for(var i=0, len=tasks.length; i<len; i++){
                 ids.push(tasks[i].user_id);
+		//taskIds.push(tasks[i]._id);
             }
+	    //获取任务评论次数
+	    
+
             userModel.find({_id:{$in: ids}}).toArray(function(err, users){
                 if(!err && users && users.length){
                     var userDict = {};
