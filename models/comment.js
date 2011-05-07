@@ -28,7 +28,7 @@ db.bind(collectionName, {
         page = (isNaN(page) || page < 1) ? 1 : page;
         pagesize = (isNaN(pagesize) || pagesize < 5) ? 5 : pagesize;
         var where = {task_id: task_id};
-	if (type = 2){
+	if (type == 2){
 	    where = {taskschedule_id: task_id};
 	}
         _t.find(where).skip((page-1)*pagesize).limit(pagesize).sort('created_at', -1).toArray(function(err, comments){
@@ -56,22 +56,34 @@ db.bind(collectionName, {
     },
     //获取任务评论次数
     //type : 1代表任务评论，2代表任务进度评论
-    //返回值：type等于1时 [{task_id:11,count:11},{...},...]   type等于2时 [{taskschedule_id:22,count:33},{...},...]
+    //返回值：{task_id:count,task_id:count,...}
     getCommentCount: function(ids, type, fn){
 	var _t = this;
-	var _key = {task_id:true};
-        var where = {task_id: {$in: ids}};
-	if(type=2){
-	    _key = {taskschedule_id:true};
-	    where = {taskschedule_id: {$in: ids}};
+	var _key = {"task_id":true};
+        var where = {"task_id": {$in: ids}};
+	if(type==2){
+	    _key = {"taskschedule_id":true};
+	    where = {"taskschedule_id": {$in: ids}};
 	}
-	var retCount = _t.group(
-			       {key: _key,
-				cond: where,
-				initial: {count: 0},
-				reduce: function(obj, prev) {prev.count++;}
-			       });
-	
+	_t.group(
+	       _key,
+		where,
+		{count: 0},
+		function(obj, prev) {prev.count++;}
+	       , function(err, retCount){
+			//console.log(err.stack);
+			if(!err && retCount){
+			    var retCountDict = {};
+			    for(var i=0, len=retCount.length; i<len; i++){
+				if(type==2){
+				    retCountDict[retCount[i].taskschedule_id.toString()] = retCount[i].count;
+				}else{
+				    retCountDict[retCount[i].task_id.toString()] = retCount[i].count;
+				}
+			    }
+			    fn(retCountDict);
+			}
+	       });
     }
 });
 

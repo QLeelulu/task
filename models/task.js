@@ -18,6 +18,7 @@
 
 var db = require('./baseModel').db,
     userModel = require('./user'),
+    commentModel = require('./comment'),
     collectionName = 'tasks';
 
 var Task = db.collection(collectionName);
@@ -42,12 +43,21 @@ db.bind(collectionName, {
                 return;
             }
             var ids = [];
-	    //var taskIds = [];
+	    var taskIds = [];
             for(var i=0, len=tasks.length; i<len; i++){
                 ids.push(tasks[i].user_id);
-		//taskIds.push(tasks[i]._id);
+		taskIds.push(tasks[i]._id);
             }
 	    //获取任务评论次数
+	    var count = 0;
+	    commentModel.getCommentCount(taskIds, 1, function(retCountDict){
+		if(retCountDict){
+		    for(var j=0, lenj=tasks.length; j<lenj; j++){
+			count = retCountDict[tasks[j]._id.toString()];
+			tasks[j].commentCount = count?count:0;
+		    }
+		}
+	    }); 
 	    
 
             userModel.find({_id:{$in: ids}}).toArray(function(err, users){
@@ -76,9 +86,20 @@ db.bind(collectionName, {
                 return;
             }
             var ids = [];
+	    var taskIds = [];
             for(var i=0, len=tasks.length; i<len; i++){
                 ids.push(tasks[i].user_id);
+		taskIds.push(tasks[i]._id);
             }
+	    //获取任务评论次数
+	    commentModel.getCommentCount(taskIds, 1, function(retCountDict){
+		if(retCountDict){
+		    for(var j=0, lenj=tasks.length; j<lenj; j++){
+			tasks[j].commentCount = retCountDict[tasks[j]._id.toString()];
+		    }
+		}
+	    }); 
+
             userModel.find({_id:{$in: ids}}).toArray(function(err, users){
                 if(!err && users && users.length){
                     var userDict = {};
