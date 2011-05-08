@@ -34,7 +34,13 @@
 			</div>
 			<div class="task-content">
 				<a class="username" href="/n/${task.user.screen_name}">${task.user.screen_name}:</a>
-				${task.text}<a href="#">评论</a>(<a href="#">${task.commentCount}</a>)
+				${task.text}
+				<a href="#">评论</a>(<a href="#">${task.commentCount}</a>)
+				<div>
+					TODO：没登录不能评论
+					<input type="text" id="txtComment${i}" />
+					<button class="minibutton green" id="btnComment${i}" onclick="addComment('txtComment${i}','${task._id}',0);">添加评论</button>
+				</div>
 			</div>
 		</li>
 	<?js }); ?>
@@ -73,6 +79,29 @@
 			}
 		});
 	});
+	//taskschedule_id:任务的评论则为0，任务进度的评论不能为0
+	function addComment(txtComment, task_id, taskschedule_id){
+		var postData = {};
+		alert(txtComment);
+		postData['text'] = $("#"+txtComment).val();
+		postData['task_id'] = task_id;
+		postData['taskschedule_id'] = taskschedule_id;
+		alert(postData['text']);
+		$.post('/task/add_comment', postData, function(r){
+			if(r.success){
+				alert('添加成功');
+			}else{
+				var err = r.error;
+				if(typeof err !== 'string'){
+					err = '';
+					for(var k in r.error){
+						err += r.error[k] + '\r\n';
+					}
+				}
+				alert(err);
+			}
+		});
+	}
 </script>
 <?js } ?>
 

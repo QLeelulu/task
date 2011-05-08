@@ -69,15 +69,18 @@ db.bind(collectionName, {
 	       _key,
 		where,
 		{count: 0},
-		function(obj, prev) {prev.count++;}
+		function(obj, prev) {prev.count++; console.log('count:++' );}
 	       , function(err, retCount){
-			//console.log(err.stack);
 			if(!err && retCount){
 			    var retCountDict = {};
+//_t.find().count(function(err,ret){console.log('count:' + ret);});
+			
+			console.log('retCount.length:' + retCount.length.toString());
 			    for(var i=0, len=retCount.length; i<len; i++){
 				if(type==2){
 				    retCountDict[retCount[i].taskschedule_id.toString()] = retCount[i].count;
 				}else{
+			console.log('retCount[i].count:'+retCount[i].count.toString());
 				    retCountDict[retCount[i].task_id.toString()] = retCount[i].count;
 				}
 			    }
