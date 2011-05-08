@@ -12,12 +12,10 @@ exports.commentForm = forms.newForm({
     }
   , task_id:{
         required: true,
-        number: true,
-        number_msg: '必须为数字'
+        number_msg: '任务ID必填'
     }
   , taskschedule_id:{
         required: true,
-        number: true,
-        number_msg: '必须为数字'
+        number_msg: '任务进度ID必填'
     }
 });

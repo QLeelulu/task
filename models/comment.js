@@ -59,28 +59,26 @@ db.bind(collectionName, {
     //返回值：{task_id:count,task_id:count,...}
     getCommentCount: function(ids, type, fn){
 	var _t = this;
-	var _key = {"task_id":true};
-        var where = {"task_id": {$in: ids}};
+	var key = {task_id:true};
+        var where = {task_id: {$in: ids}};
 	if(type==2){
-	    _key = {"taskschedule_id":true};
-	    where = {"taskschedule_id": {$in: ids}};
+	    key = {taskschedule_id:true};
+	    where = {taskschedule_id: {$in: ids}};
 	}
+console.dir(ids);
 	_t.group(
-	       _key,
+	        key,
 		where,
 		{count: 0},
-		function(obj, prev) {prev.count++; console.log('count:++' );}
+		function(obj, prev) {prev.count++;}
 	       , function(err, retCount){
 			if(!err && retCount){
 			    var retCountDict = {};
-//_t.find().count(function(err,ret){console.log('count:' + ret);});
-			
-			console.log('retCount.length:' + retCount.length.toString());
+console.dir(retCount);		
 			    for(var i=0, len=retCount.length; i<len; i++){
 				if(type==2){
 				    retCountDict[retCount[i].taskschedule_id.toString()] = retCount[i].count;
 				}else{
-			console.log('retCount[i].count:'+retCount[i].count.toString());
 				    retCountDict[retCount[i].task_id.toString()] = retCount[i].count;
 				}
 			    }

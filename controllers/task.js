@@ -53,6 +53,10 @@ exports.add_comment_post = function(fnNext){
     var comment = new commentForm(_t.req.post);
     if(comment.isValid()){
         comment = comment.fieldDatas();
+	comment.task_id = commentModel.id(comment.task_id);
+	if(comment.taskschedule_id != 0){
+		comment.taskschedule_id = commentModel.id(comment.taskschedule_id);
+	}
         comment.created_at = new Date();
         comment.user_id = _t.req.user._id;
         commentModel.insert(comment, 

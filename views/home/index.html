@@ -82,11 +82,9 @@
 	//taskschedule_id:任务的评论则为0，任务进度的评论不能为0
 	function addComment(txtComment, task_id, taskschedule_id){
 		var postData = {};
-		alert(txtComment);
 		postData['text'] = $("#"+txtComment).val();
 		postData['task_id'] = task_id;
 		postData['taskschedule_id'] = taskschedule_id;
-		alert(postData['text']);
 		$.post('/task/add_comment', postData, function(r){
 			if(r.success){
 				alert('添加成功');
