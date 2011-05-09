@@ -47,6 +47,7 @@ db.bind(collectionName, {
             for(var i=0, len=tasks.length; i<len; i++){
                 ids.push(tasks[i].user_id);
 		taskIds.push(tasks[i]._id);
+		tasks[i].commentCount = 0
             }
 	    //获取任务评论次数
 	    var count = 0;
@@ -90,6 +91,7 @@ db.bind(collectionName, {
             for(var i=0, len=tasks.length; i<len; i++){
                 ids.push(tasks[i].user_id);
 		taskIds.push(tasks[i]._id);
+		tasks[i].commentCount = 0
             }
 	    //获取任务评论次数
 	    var count = 0;

@@ -65,7 +65,7 @@ db.bind(collectionName, {
 	    key = {taskschedule_id:true};
 	    where = {taskschedule_id: {$in: ids}};
 	}
-console.dir(ids);
+//console.dir(ids);
 	_t.group(
 	        key,
 		where,
@@ -74,7 +74,7 @@ console.dir(ids);
 	       , function(err, retCount){
 			if(!err && retCount){
 			    var retCountDict = {};
-console.dir(retCount);		
+//console.dir(retCount);		
 			    for(var i=0, len=retCount.length; i<len; i++){
 				if(type==2){
 				    retCountDict[retCount[i].taskschedule_id.toString()] = retCount[i].count;
@@ -82,9 +82,10 @@ console.dir(retCount);
 				    retCountDict[retCount[i].task_id.toString()] = retCount[i].count;
 				}
 			    }
-			    fn(retCountDict);
 			}
+			fn(retCountDict);
 	       });
+
     }
 });
 
