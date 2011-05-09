@@ -70,7 +70,7 @@ console.dir(ids);
 	        key,
 		where,
 		{count: 0},
-		function(obj, prev) {prev.count++;}
+		function(obj, prev) {prev.count++;prev.task_id=obj.task_id;}
 	       , function(err, retCount){
 			if(!err && retCount){
 			    var retCountDict = {};

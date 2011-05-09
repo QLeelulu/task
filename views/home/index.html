@@ -40,6 +40,7 @@
 					TODO：没登录不能评论
 					<input type="text" id="txtComment${i}" />
 					<button class="minibutton green" id="btnComment${i}" onclick="addComment('txtComment${i}','${task._id}',0);">添加评论</button>
+					<button class="minibutton green" id="btnGetComment${i}" onclick="getComment('${task._id}',1);">查看评论</button>
 				</div>
 			</div>
 		</li>
@@ -88,6 +89,28 @@
 		$.post('/task/add_comment', postData, function(r){
 			if(r.success){
 				alert('添加成功');
+			}else{
+				var err = r.error;
+				if(typeof err !== 'string'){
+					err = '';
+					for(var k in r.error){
+						err += r.error[k] + '\r\n';
+					}
+				}
+				alert(err);
+			}
+		});
+	}
+	//
+	function getComment(task_id, type){
+		var postData = {};
+		postData['task_id'] = task_id;
+		postData['type'] = type;
+		postData['pagesize'] = 10;
+		postData['page'] = 1;
+		$.post('/task/get_comments', postData, function(r){
+			if(r.success){
+				alert('text:' + r.comments[0].text + '  screen_name:' + r.comments[0].user.screen_name);
 			}else{
 				var err = r.error;
 				if(typeof err !== 'string'){
