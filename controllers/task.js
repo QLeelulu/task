@@ -82,13 +82,14 @@ exports.get_comments = function(fnNext){
         task_id = _t.req.post.task_id
 	page = _t.req.post.page,
 	pagesize = _t.req.post.pagesize;
-console.dir(_t.req.post);
+//console.dir(_t.req.post);
     if(task_id && task_id != ''){
         commentModel.getTaskComments(commentModel.id(task_id), type, page, pagesize, 
             function(err, comments){
                 if(err){
                     r.error = '获取评论失败';
                 }else{
+//console.dir(comments);
                     r.success = true;
 		    r.comments = comments;
                 } 

@@ -32,14 +32,18 @@ db.bind(collectionName, {
 	    where = {taskschedule_id: task_id};
 	}
         _t.find(where).skip((page-1)*pagesize).limit(pagesize).sort('created_at', -1).toArray(function(err, comments){
+//console.dir(comments);
             if(err || !comments || !comments.length){
+//console.log('comment error');
                 fn && fn(err, comments);
                 return;
             }
             var ids = [];
+//console.log(comments.length);
             for(var i=0, len=comments.length; i<len; i++){
                 ids.push(comments[i].user_id);
             }
+//console.dir(ids);
             userModel.find({_id:{$in: ids}}).toArray(function(err, users){
                 if(!err && users && users.length){
                     var userDict = {};
@@ -71,7 +75,7 @@ db.bind(collectionName, {
 		where,
 		{count: 0},
 		function(obj, prev) {prev.count++;prev.task_id=obj.task_id;}
-	       , function(err, retCount){
+	        , function(err, retCount){
 			if(!err && retCount){
 			    var retCountDict = {};
 //console.dir(retCount);		

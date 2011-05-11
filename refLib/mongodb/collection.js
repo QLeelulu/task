@@ -536,6 +536,7 @@ Collection.prototype.group = function(keys, condition, initial, reduce, command,
   callback = args.pop();
   reduce = args.length ? args.shift() : null;
   command = args.length ? args.shift() : null;
+console.dir(command);
   if(command) {
     var hash = {},
         reduceFunction = reduce != null && reduce instanceof this.db.bson_serializer.Code ? reduce : new this.db.bson_serializer.Code(reduce);
