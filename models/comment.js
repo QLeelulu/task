@@ -63,10 +63,10 @@ db.bind(collectionName, {
     //返回值：{task_id:count,task_id:count,...}
     getCommentCount: function(ids, type, fn){
 	var _t = this;
-	var key = {task_id:true};
+	var key = ['task_id'];//{task_id:true};
         var where = {task_id: {$in: ids}};
 	if(type==2){
-	    key = {taskschedule_id:true};
+	    key = ['taskschedule_id'];//{taskschedule_id:true};
 	    where = {taskschedule_id: {$in: ids}};
 	}
 //console.dir(ids);
