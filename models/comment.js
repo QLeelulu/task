@@ -74,11 +74,11 @@ db.bind(collectionName, {
 	        key,
 		where,
 		{count: 0},
-		function(obj, prev) {prev.count++;prev.task_id=obj.task_id;}
+		function(obj, prev) {prev.count++;}
 	        , function(err, retCount){
 			if(!err && retCount){
 			    var retCountDict = {};
-//console.dir(retCount);		
+//console.dir(retCount);prev.task_id=obj.task_id;		
 			    for(var i=0, len=retCount.length; i<len; i++){
 				if(type==2){
 				    retCountDict[retCount[i].taskschedule_id.toString()] = retCount[i].count;
